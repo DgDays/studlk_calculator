@@ -1,0 +1,45 @@
+/* styles.css */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: rgb(135,0,193);
+    background: linear-gradient(90deg, rgba(135,0,193,1) 0%, rgba(6,6,213,1) 50%, rgba(0,146,247,1) 100%);
+}
+
+h1, h2 {
+    color: white;
+}
+
+input {
+    margin: 5px 0; /* Отступ между input */
+    padding: 10px; /* Внутренний отступ для удобства */
+    width: 200px; /* Ширина input */
+    border-radius: 10px;
+}
+
+form {
+    display: flex;
+    flex-direction: column; /* Размещаем элементы в колонку */
+    align-items: center; /* Центрируем элементы по горизонтали */
+    position: relative; /* Устанавливаем относительное позиционирование */
+}
+
+#welcome, #login {
+    position: absolute; /* Устанавливаем абсолютное позиционирование */
+    left: 50%; /* Центрируем по горизонтали */
+    transform: translateX(-50%); /* Сдвигаем на половину ширины элемента для центрирования */
+    opacity: 0; /* Начальная непрозрачность */
+    visibility: hidden; /* Элемент невидим */
+    transition: opacity 0.5s ease, visibility 0.5s ease; /* Плавный переход для opacity и visibility */
+    text-align: center;
+    margin: 10px; /* Отступ между контейнерами */
+}
+
+#welcome.active, #login.active {
+    opacity: 1; /* Полная непрозрачность */
+    visibility: visible; /* Элемент видим */
+}
