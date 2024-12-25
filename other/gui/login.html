@@ -6,6 +6,7 @@
     <title>Вход</title>
 
     <script src="eel.js"></script>
+    <script src="login/eelFunc.js"></script>
     <link rel="stylesheet" href="login/login.css">
 </head>
 <body>
@@ -13,11 +14,11 @@
         <h1>Привет!</h1>
         <h2> Я помогу тебе подсчитать баллы для успешного закрытия сессии</h2>
     </div>
-    <div id="login">
+    <div id="login_div">
         <form action="">
-            <input type="login" placeholder="Логин">
-            <input type="password" placeholder="Пароль">
-            <input type="button" value="Войти">
+            <input type="login" id="login" placeholder="Логин">
+            <input type="password" id="password" placeholder="Пароль">
+            <input type="button" value="Войти" onclick="get_lessons()">
         </form>
     </div>
     <script src="login/login.js"></script>

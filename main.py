@@ -1,7 +1,17 @@
 import eel
-import selenium
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 
+geckodriver_path = "./geckodriver"
 
+def get_lessons(login, password):
+    driver = webdriver.Firefox(executable_path = geckodriver_path)
+    try:
+        driver.get("https://studlk.susu.ru")
+    finally:
+        driver.quit()
+    return True
 
 eel.init("./other/gui")
 

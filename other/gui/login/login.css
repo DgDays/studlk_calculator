@@ -28,7 +28,7 @@ form {
     position: relative; /* Устанавливаем относительное позиционирование */
 }
 
-#welcome, #login {
+#welcome, #loginDiv {
     position: absolute; /* Устанавливаем абсолютное позиционирование */
     left: 50%; /* Центрируем по горизонтали */
     transform: translateX(-50%); /* Сдвигаем на половину ширины элемента для центрирования */
@@ -39,7 +39,7 @@ form {
     margin: 10px; /* Отступ между контейнерами */
 }
 
-#welcome.active, #login.active {
+#welcome.active, #loginDiv.active {
     opacity: 1; /* Полная непрозрачность */
     visibility: visible; /* Элемент видим */
 }

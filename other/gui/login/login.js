@@ -1,5 +1,5 @@
 const welcome = document.getElementById('welcome');
-const login = document.getElementById('login');
+const login = document.getElementById('loginDiv');
 
         // Функция для переключения между welcome и login
 function showLogin() {
