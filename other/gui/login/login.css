@@ -28,6 +28,10 @@ form {
     position: relative; /* Устанавливаем относительное позиционирование */
 }
 
+table {
+    background-color: white;
+}
+
 #welcome, #loginDiv {
     position: absolute; /* Устанавливаем абсолютное позиционирование */
     left: 50%; /* Центрируем по горизонтали */
