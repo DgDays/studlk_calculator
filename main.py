@@ -22,11 +22,17 @@ def get_lessons(login, password):
             )
         except:
             pass
+        driver.find_element(By.XPATH, "/html/body/div[5]/div/div/div[2]").click()
+        try:
+            WebDriverWait(driver, 20).until(
+                EC.presence_of_element_located((By.ID, "gvStudyPlan_tccell1_1"))
+            )
+        except:
+            pass
         table = driver.find_element(By.ID, "gvStudyPlan_DXMainTable").get_attribute("outerHTML")
     finally:
         driver.quit()
     return table
 
 eel.init("./other/gui")
-
-eel.start("login.html", mode="edge", host="localhost", port=2700, block=True, size=(1080, 720), position=(800, 250))
+eel.start("login.html", mode="geckodriver", host="localhost", port=2700, block=True)
