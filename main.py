@@ -59,4 +59,4 @@ def calculate(link, flag):
     pass
 
 eel.init("./other/gui")
-eel.start("login.html", mode="geckodriver", host="localhost", port=2700, block=True)
+eel.start("login.html", mode="chrome", host="localhost", port=2700, block=True)
