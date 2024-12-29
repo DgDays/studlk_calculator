@@ -12,3 +12,8 @@ async function get_lessons() {
     let res = await eel.get_lessons(login, password)(); // Убедитесь, что функция Eel возвращает результат
     document.body.innerHTML = res; // Обновляем содержимое страницы
 }
+
+async function calculate(link, flag){
+    let res = await eel.calculate(link, flag)();
+    document.body.innerHTML = res;
+}
