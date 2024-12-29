@@ -23,7 +23,6 @@ def get_lessons(login, password):
             )
         except:
             pass
-        # Временно отключил
         driver.find_element(By.XPATH, "/html/body/div[5]/div/div/div[2]").click()
         try:
             WebDriverWait(driver, 20).until(
@@ -31,6 +30,7 @@ def get_lessons(login, password):
             )
         except:
             pass
+
         table = driver.find_element(By.ID, "gvStudyPlan_DXMainTable").get_attribute("outerHTML")
         table = BeautifulSoup(table, "html.parser")
 
@@ -44,15 +44,19 @@ def get_lessons(login, password):
             else:
                 i['class'] = i.get('class', []) + ['details']
 
-        # ЗАдед для будущей логики
-        '''links = table.find_elements(By.TAG_NAME, "a")
-        journal_links = []
+        links = table.find_all("a")
         for i in links:
-            if "Журнал" in i.get_attribute("innerHTML"):
-                journal_links.append(i)'''
+            if "журнал" in i.text.lower():
+                i['onclick'] = f"calculate({i['href']},{1 if "да" in i.parent.parent.find_all("td")[12].text.lower() else 0})"
+                i['href'] = ''
     finally:
         driver.quit()
+
     return table.prettify()
+
+@eel.expose
+def calculate(link, flag):
+    pass
 
 eel.init("./other/gui")
 eel.start("login.html", mode="geckodriver", host="localhost", port=2700, block=True)
