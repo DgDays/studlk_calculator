@@ -3,6 +3,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from bs4 import BeautifulSoup
 from time import sleep
 
 @eel.expose
@@ -22,6 +23,7 @@ def get_lessons(login, password):
             )
         except:
             pass
+        # Временно отключил
         driver.find_element(By.XPATH, "/html/body/div[5]/div/div/div[2]").click()
         try:
             WebDriverWait(driver, 20).until(
@@ -30,9 +32,27 @@ def get_lessons(login, password):
         except:
             pass
         table = driver.find_element(By.ID, "gvStudyPlan_DXMainTable").get_attribute("outerHTML")
+        table = BeautifulSoup(table, "html.parser")
+
+        raws = table.find_all("tr")[3:]
+
+        for i in raws:
+            tds = i.find_all("td")
+            if "семестр" in tds[1].text.lower():
+                i['class'] = i.get('class', []) + ['clickable']
+                i['onclick'] = "toggleDetails(this)"
+            else:
+                i['class'] = i.get('class', []) + ['details']
+
+        # ЗАдед для будущей логики
+        '''links = table.find_elements(By.TAG_NAME, "a")
+        journal_links = []
+        for i in links:
+            if "Журнал" in i.get_attribute("innerHTML"):
+                journal_links.append(i)'''
     finally:
         driver.quit()
-    return table
+    return table.prettify()
 
 eel.init("./other/gui")
 eel.start("login.html", mode="geckodriver", host="localhost", port=2700, block=True)
