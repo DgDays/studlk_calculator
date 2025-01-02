@@ -72,6 +72,15 @@ th {
     background-color: #f9f9f9;
 }
 
+.back-button {
+    background-color: white; /* Белый фон */
+    border: 1px solid #ccc; /* Граница */
+    border-radius: 5px; /* Закругленные углы */
+    padding: 10px 15px; /* Отступы */
+    cursor: pointer; /* Курсор в виде указателя */
+    margin-bottom: 10px; /* Отступ снизу */
+}
+
 p.link-like {
     color: blue; /* Цвет текста */
     text-decoration: underline; /* Подчеркивание */

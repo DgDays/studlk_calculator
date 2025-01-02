@@ -14,7 +14,11 @@ async function get_lessons() {
 }
 
 async function calculate(link, flag){
-    console.log("Calcutaling!!!");
     let res = await eel.calculate(link, flag)();
+    document.body.innerHTML = res;
+}
+
+async function backToMain() {
+    let res = await eel.backToMain()();
     document.body.innerHTML = res;
 }

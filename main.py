@@ -6,11 +6,11 @@ from selenium.webdriver.support import expected_conditions as EC
 from bs4 import BeautifulSoup
 from time import sleep
 
-log, passw = '', ''
+log, passw, main_table = ['']*3
 
 @eel.expose
 def get_lessons(login, password):
-    global log, passw
+    global log, passw, main_table
     log, passw = login, password
     driver = webdriver.Firefox()
     table = None
@@ -58,8 +58,8 @@ def get_lessons(login, password):
                 
     finally:
         driver.quit()
-
-    return table.prettify()
+    main_table = table.prettify()
+    return main_table
 
 @eel.expose
 def calculate(link, flag):
@@ -81,10 +81,17 @@ def calculate(link, flag):
             pass
         table = driver.find_element(By.ID, "MarkJournalPivotGrid_DCSCell_SCDTable").get_attribute("outerHTML")
         table = BeautifulSoup(table, "html.parser")
-
+        back_button = table.new_tag('button', **{'class': 'back-button', "onclick":"backToMain()"})
+        back_button.string = 'Возврат'
+        table.insert(0, back_button)
     finally:
         driver.quit()
     return table.prettify()
+
+@eel.expose
+def backToMain():
+    global main_table
+    return main_table
 
 eel.init("./other/gui")
 eel.start("login.html", mode="chrome", host="localhost", port=2700, block=True)
