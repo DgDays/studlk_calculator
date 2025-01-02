@@ -6,8 +6,12 @@ from selenium.webdriver.support import expected_conditions as EC
 from bs4 import BeautifulSoup
 from time import sleep
 
+log, passw = '', ''
+
 @eel.expose
 def get_lessons(login, password):
+    global log, passw
+    log, passw = login, password
     driver = webdriver.Firefox()
     table = None
     try:
@@ -47,8 +51,11 @@ def get_lessons(login, password):
         links = table.find_all("a")
         for i in links:
             if "журнал" in i.text.lower():
-                i['onclick'] = f"calculate({i['href']},{1 if "да" in i.parent.parent.find_all("td")[12].text.lower() else 0})"
-                i['href'] = ''
+                p = table.new_tag('p', **{'class': 'link-like'})  # Создаем новый <p> с классом
+                p.string = i.string  # Копируем текст из <a>
+                p['onclick'] = f'calculate("{i['href']}",{1 if "да" in i.parent.parent.find_all("td")[12].text.lower() else 0})'
+                i.replace_with(p) 
+                
     finally:
         driver.quit()
 
@@ -56,7 +63,28 @@ def get_lessons(login, password):
 
 @eel.expose
 def calculate(link, flag):
-    pass
+    global log, passw
+    driver = webdriver.Firefox()
+    table = None
+    try:
+        driver.get("https://studlk.susu.ru")
+        driver.find_element(By.ID, "UserName_I").send_keys(log)
+        driver.find_element(By.ID, "dxPassword_I").send_keys(passw)
+        driver.find_element(By.ID, "LoginBtn").click()
+
+        driver.get("https://studlk.susu.ru"+link)
+        try:
+            WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located((By.ID, "gvStudyPlan_tccell1_1"))
+            )
+        except:
+            pass
+        table = driver.find_element(By.ID, "MarkJournalPivotGrid_DCSCell_SCDTable").get_attribute("outerHTML")
+        table = BeautifulSoup(table, "html.parser")
+
+    finally:
+        driver.quit()
+    return table.prettify()
 
 eel.init("./other/gui")
 eel.start("login.html", mode="chrome", host="localhost", port=2700, block=True)

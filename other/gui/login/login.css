@@ -71,3 +71,9 @@ th {
     display: none; /* Скрываем строки с дополнительной информацией по умолчанию */
     background-color: #f9f9f9;
 }
+
+p.link-like {
+    color: blue; /* Цвет текста */
+    text-decoration: underline; /* Подчеркивание */
+    cursor: pointer; /* Курсор в виде указателя */
+}
