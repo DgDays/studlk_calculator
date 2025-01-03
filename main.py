@@ -12,7 +12,9 @@ log, passw, main_table = ['']*3
 def get_lessons(login, password):
     global log, passw, main_table
     log, passw = login, password
-    driver = webdriver.Firefox()
+    options = webdriver.FirefoxOptions()
+    options.add_argument('-headless')
+    driver = webdriver.Firefox(options=options)
     table = None
     try:
         driver.get("https://studlk.susu.ru")
@@ -64,7 +66,9 @@ def get_lessons(login, password):
 @eel.expose
 def calculate(link, flag):
     global log, passw
-    driver = webdriver.Firefox()
+    options = webdriver.FirefoxOptions()
+    options.add_argument('-headless')
+    driver = webdriver.Firefox(options=options)
     table = None
     try:
         driver.get("https://studlk.susu.ru")
@@ -85,6 +89,18 @@ def calculate(link, flag):
         points = table.find(id="MarkJournalPivotGrid_DCSCell_SCDTable").find_all("tr")
         table = BeautifulSoup("", "html.parser")
         table.insert(0, table.new_tag("table"))
+
+        weight_str, points_str = ['']*2
+
+        for raw in range(len(points)):
+            for i in range(len(points[raw].find_all("td"))):
+                if raw % 2:
+                    if i % 2 and all(char in "1234567890," for char in points[raw].find_all("td")[i].decode_contents()):
+                        points_str += f"{points[raw].find_all("td")[i].decode_contents()} "
+                else:
+                    if points[raw].find_all("td")[i].decode_contents() != '':
+                        weight_str += f"{points[raw].find_all("td")[i].decode_contents()} "
+
         for i in table1:
             table.find("table").append(i)
         for i in points:
