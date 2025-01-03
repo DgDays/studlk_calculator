@@ -83,31 +83,82 @@ def calculate(link, flag):
             )
         except:
             pass
+        name = driver.find_element(By.ID, "MainBody").find_elements(By.TAG_NAME, "span")[1].get_attribute("innerHTML")
         table = driver.find_element(By.ID, "MarkJournalPivotGrid_PT").get_attribute("outerHTML")
         table = BeautifulSoup(table, "html.parser")
         table1 = table.find(id="MarkJournalPivotGrid_CVSCell_SCDTable").find_all("tr")
         points = table.find(id="MarkJournalPivotGrid_DCSCell_SCDTable").find_all("tr")
-        table = BeautifulSoup("", "html.parser")
-        table.insert(0, table.new_tag("table"))
 
-        weight_str, points_str = ['']*2
+        table = BeautifulSoup('', "html.parser")
 
-        for raw in range(len(points)):
-            for i in range(len(points[raw].find_all("td"))):
-                if raw % 2:
-                    if i % 2 and all(char in "1234567890," for char in points[raw].find_all("td")[i].decode_contents()):
-                        points_str += f"{points[raw].find_all("td")[i].decode_contents()} "
-                else:
-                    if points[raw].find_all("td")[i].decode_contents() != '':
-                        weight_str += f"{points[raw].find_all("td")[i].decode_contents()} "
+        name_tag = table.new_tag("h1")
+        name_tag.string = name
 
+        # Создаем новый div с классом для стилей
+        div_block = table.new_tag("div", **{'class': 'block-container'})
+
+        # Добавляем стиль для div
+        style = """
+        <style>
+            .block-container {
+                display: flex; /* Используем flexbox для центрирования */
+                flex-direction: column; /* Элементы внутри будут располагаться вертикально */
+                align-items: center; /* Центрируем элементы по горизонтали */
+                margin: 0 auto; /* Центрирование контейнера */
+                max-width: 600px; /* Максимальная ширина контейнера (по желанию) */
+                padding: 20px; /* Отступы внутри контейнера */
+                border: none;
+            }
+            .table-container {
+                overflow-x: auto; /* Горизонтальная прокрутка */
+                width: 1000px; /* Ширина контейнера для таблицы */
+                margin-top: 10px; /* Отступ сверху для контейнера таблицы */
+                border: none;
+                border-radius: 10px;
+            }
+            table {
+                width: 100%; /* Таблица занимает всю ширину контейнера */
+                border-collapse: collapse; /* Убираем двойные границы */
+                margin-top: 10px; /* Отступ сверху для таблицы */
+            }
+            th, td {
+                text-align: center; /* Центрируем текст в ячейках */
+                padding: 8px; /* Отступы внутри ячеек */
+                border: 1px solid #ccc; /* Граница ячеек (по желанию) */
+            }
+            .back-button {
+                display: block; /* Кнопка будет отображаться как блок */
+                margin-top: 10px; /* Отступ сверху */
+            }
+        </style>
+        """
+
+        # Вставляем стиль в начало таблицы
+        table.insert(0, BeautifulSoup(style, "html.parser"))
+
+        # Оборачиваем элементы в div
+        div_block.append(name_tag)  # Добавляем заголовок
+        table_container = table.new_tag("div", **{'class': 'table-container'})
+        div_block.append(table_container)  # Добавляем контейнер для таблицы в div_block
+
+        # Добавляем таблицу в контейнер
+        table_tag = table.new_tag("table")
+        table_container.append(table_tag)  # Добавляем таблицу в контейнер
+
+        # Добавляем div в основную таблицу
+        table.append(div_block)
+
+        # Добавляем строки таблицы в новый div
         for i in table1:
-            table.find("table").append(i)
+            table_tag.append(i)  # Добавляем строки в таблицу
         for i in points:
-            table.find("table").append(i)
-        back_button = table.new_tag('button', **{'class': 'back-button', "onclick":"backToMain()"})
+            table_tag.append(i)
+
+        # Создаем кнопку и добавляем ее в div
+        back_button = table.new_tag('button', **{'class': 'back-button', "onclick": "backToMain()"})
         back_button.string = 'Возврат'
-        table.insert(0, back_button)
+        div_block.insert(1, back_button)  # Добавляем кнопку в div
+
     finally:
         driver.quit()
     return table.prettify()
