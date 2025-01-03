@@ -79,8 +79,16 @@ def calculate(link, flag):
             )
         except:
             pass
-        table = driver.find_element(By.ID, "MarkJournalPivotGrid_DCSCell_SCDTable").get_attribute("outerHTML")
+        table = driver.find_element(By.ID, "MarkJournalPivotGrid_PT").get_attribute("outerHTML")
         table = BeautifulSoup(table, "html.parser")
+        table1 = table.find(id="MarkJournalPivotGrid_CVSCell_SCDTable").find_all("tr")
+        points = table.find(id="MarkJournalPivotGrid_DCSCell_SCDTable").find_all("tr")
+        table = BeautifulSoup("", "html.parser")
+        table.insert(0, table.new_tag("table"))
+        for i in table1:
+            table.find("table").append(i)
+        for i in points:
+            table.find("table").append(i)
         back_button = table.new_tag('button', **{'class': 'back-button', "onclick":"backToMain()"})
         back_button.string = 'Возврат'
         table.insert(0, back_button)
