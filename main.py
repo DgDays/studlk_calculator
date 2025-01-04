@@ -37,8 +37,17 @@ def get_lessons(login, password):
         except:
             pass
 
-        table = driver.find_element(By.ID, "gvStudyPlan_DXMainTable").get_attribute("outerHTML")
+        table = driver.find_element(By.XPATH, "/html/body/div[5]/div/table[2]/tbody/tr/td/table[1]").get_attribute("outerHTML")
         table = BeautifulSoup(table, "html.parser")
+
+        new_body = BeautifulSoup('', "html.parser")
+
+        new_div = new_body.new_tag("div")
+        new_div['style'] = 'height: 600px; width: 900px; overflow-y: auto;'
+        new_body.append(new_div)
+
+        new_table = new_body.new_tag("table")
+        new_div.append(new_table)
 
         raws = table.find_all("tr")[3:]
 
@@ -49,18 +58,20 @@ def get_lessons(login, password):
                 i['onclick'] = "toggleDetails(this)"
             else:
                 i['class'] = i.get('class', []) + ['details']
+                i['style'] = "display: none;"
+            new_table.append(i)
 
-        links = table.find_all("a")
+        links = new_table.find_all("a")
         for i in links:
             if "журнал" in i.text.lower():
-                p = table.new_tag('p', **{'class': 'link-like'})  # Создаем новый <p> с классом
+                p = new_body.new_tag('p', **{'class': 'link-like'})  # Создаем новый <p> с классом
                 p.string = i.string  # Копируем текст из <a>
                 p['onclick'] = f'calculate("{i['href']}",{1 if "да" in i.parent.parent.find_all("td")[12].text.lower() else 0})'
                 i.replace_with(p) 
                 
     finally:
         driver.quit()
-    main_table = table.prettify()
+    main_table = new_body.prettify()
     return main_table
 
 @eel.expose
