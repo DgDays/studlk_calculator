@@ -83,8 +83,13 @@ def get_lessons(login, password):
             if "семестр" in tds[1].text.lower():
                 tds[1]['colspan'] = "3"
                 tds[0].decompose()
-    except:
-        return "<div id='loginDiv' class='active'><form action=''><input type='login' id='login' placeholder='Логин'><input type='password' id='password' placeholder='Пароль'><input type='button' value='Войти' onclick='get_lessons()'></form></div><script src='login/login.js'></script>"            
+            else:
+                a = tds[1].find('a')
+                if a:
+                    p = new_body.new_tag('p')
+                    p.string = a.string  # Копируем текст из <a>
+                    a.replace_with(p)
+           
     
     finally:
         driver.quit()
