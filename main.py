@@ -83,7 +83,9 @@ def get_lessons(login, password):
             if "семестр" in tds[1].text.lower():
                 tds[1]['colspan'] = "3"
                 tds[0].decompose()
-                
+    except:
+        return "<div id='loginDiv' class='active'><form action=''><input type='login' id='login' placeholder='Логин'><input type='password' id='password' placeholder='Пароль'><input type='button' value='Войти' onclick='get_lessons()'></form></div><script src='login/login.js'></script>"            
+    
     finally:
         driver.quit()
     main_table = new_body.prettify()
@@ -91,7 +93,7 @@ def get_lessons(login, password):
 
 @eel.expose
 def calculate(link, flag):
-    global log, passw
+    global log, passw, main_table
     options = webdriver.FirefoxOptions()
     options.add_argument('-headless')
     driver = webdriver.Firefox(options=options)
@@ -184,7 +186,8 @@ def calculate(link, flag):
         back_button = table.new_tag('button', **{'class': 'back-button', "onclick": "backToMain()"})
         back_button.string = 'Возврат'
         div_block.insert(1, back_button)  # Добавляем кнопку в div
-
+    except:
+        return main_table
     finally:
         driver.quit()
     return table.prettify()
