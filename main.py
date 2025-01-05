@@ -43,11 +43,15 @@ def get_lessons(login, password):
         new_body = BeautifulSoup('', "html.parser")
 
         new_div = new_body.new_tag("div")
-        new_div['style'] = 'height: 600px; width: 900px; overflow-y: auto;'
+        new_div['style'] = 'height: 450px; max-height:600px; width: 900px; overflow-y: auto;'
         new_body.append(new_div)
 
         new_table = new_body.new_tag("table")
+        new_table['style'] = "width: 100%;"
         new_div.append(new_table)
+        names = """<colgroup><col style="width: 450px" span="2"><col style="width: 450px"></colgroup><tr><td colspan="2">Дисциплина</td><td>Журнал</td></tr>"""
+        names = BeautifulSoup(names, "html.parser")
+        new_table.append(names)
 
         raws = table.find_all("tr")[3:]
 
@@ -68,6 +72,17 @@ def get_lessons(login, password):
                 p.string = i.string  # Копируем текст из <a>
                 p['onclick'] = f'calculate("{i['href']}",{1 if "да" in i.parent.parent.find_all("td")[12].text.lower() else 0})'
                 i.replace_with(p) 
+
+        raws = new_table.find_all("tr")[1:]
+
+        for i in raws:
+            tds = i.find_all("td")[3:]
+            for j in tds:
+                j.decompose()
+            tds = i.find_all("td")
+            if "семестр" in tds[1].text.lower():
+                tds[1]['colspan'] = "3"
+                tds[0].decompose()
                 
     finally:
         driver.quit()
