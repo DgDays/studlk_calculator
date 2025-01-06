@@ -23,3 +23,13 @@ async function backToMain() {
     let res = await eel.backToMain()();
     document.body.innerHTML = res;
 }
+
+eel.expose(eel_alert_login);
+function eel_alert_login(){
+    alert("Произошла ошибка при входе в систему. Повторите действие позже");
+}
+
+eel.expose(eel_alert_table);
+function eel_alert_table(){
+    alert("Произошла ошибка при загрузке баллов. Повторите действие позже");
+}

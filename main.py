@@ -89,7 +89,10 @@ def get_lessons(login, password):
                     p = new_body.new_tag('p')
                     p.string = a.string  # Копируем текст из <a>
                     a.replace_with(p)
-           
+    
+    except:
+        eel.eel_alert_login()
+        return "<div id='loginDiv' class='active'><form action=''><input type='login' id='login' placeholder='Логин'><input type='password' id='password' placeholder='Пароль'><input type='button' value='Войти' onclick='get_lessons()'></form></div><script src='login/login.js'></script>"
     
     finally:
         driver.quit()
@@ -192,6 +195,7 @@ def calculate(link, flag):
         back_button.string = 'Возврат'
         div_block.insert(1, back_button)  # Добавляем кнопку в div
     except:
+        eel.eel_alert_table()
         return main_table
     finally:
         driver.quit()
