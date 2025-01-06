@@ -147,7 +147,7 @@ def calculate(link, flag):
             }
             .table-container {
                 overflow-x: auto; /* Горизонтальная прокрутка */
-                width: 1000px; /* Ширина контейнера для таблицы */
+                width: 90vw; /* Ширина контейнера для таблицы */
                 margin-top: 10px; /* Отступ сверху для контейнера таблицы */
                 border: none;
                 border-radius: 10px;
