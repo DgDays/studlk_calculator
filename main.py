@@ -49,7 +49,7 @@ def get_lessons(login, password):
         new_table = new_body.new_tag("table")
         new_table['style'] = "width: 100%;"
         new_div.append(new_table)
-        names = """<colgroup><col style="width: 450px" span="2"><col style="width: 450px"></colgroup><tr><td colspan="2">Дисциплина</td><td>Журнал</td></tr>"""
+        names = """<colgroup><col style="width: 100px"><col style="width: 600px"><col style="width: 200px"></colgroup><tr><td colspan="2">Дисциплина</td><td>Журнал</td></tr>"""
         names = BeautifulSoup(names, "html.parser")
         new_table.append(names)
 
