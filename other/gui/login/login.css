@@ -63,6 +63,10 @@ th {
     background-color: #f2f2f2;
 }
 
+.p_out {
+    color: white;
+}
+
 .clickable {
     cursor: pointer;
 }
