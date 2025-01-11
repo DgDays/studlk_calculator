@@ -10,8 +10,8 @@
 4. Запустить `main.py`
 
 ## Обход наличия Edge
-Для адекватной работы на лини достаточно найти строку:
-```eel.start("login.html", mode="edge", host="localhost", port=2700, block=True)```
-и заменить ее на:
-```eel.start("login.html", mode="chrome", host="localhost", port=2700, block=True)```
-В дальнейшем добавлю автоопределение системы и адекватный запуск
+Для адекватной работы на лини достаточно найти строку:  
+```eel.start("login.html", mode="edge", host="localhost", port=2700, block=True)```  
+и заменить ее на:  
+```eel.start("login.html", mode="chrome", host="localhost", port=2700, block=True)```  
+В дальнейшем добавлю автоопределение системы и адекватный запуск  
