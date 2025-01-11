@@ -292,8 +292,9 @@ def calculate(link, flag):
             p = table.new_tag("p", **{'class': 'p_out'})
             p.string = line
             div_block.append(p)
-
-    
+    except:
+        eel.eel_alert_table()
+        return main_table
     finally:
         driver.quit()
     return table.prettify()
