@@ -31,6 +31,7 @@ def vesa(str):
     return f_vesa
 
 def bally(str):
+    str = str.replace(',','.')
     bally = str.split() #такое же количество элементов как в весах все остальное считается
     #print(bally)
     ball = []
@@ -69,18 +70,8 @@ def percent(vesa,bally):
     sum_3 = sum_v*0.6
     sum_4 = sum_v*0.75
     sum_5 = sum_v*0.85
-    output.append("VESA |")
-    for i in range(len(vesa)):
-        output.append(f"{vesa[i]:^6}|")
-    output.append("")  # Для новой строки
-
-    output.append("BALLY|")
-    for i in range(len(bally)):
-        output.append(f"{bally[i]:^6}|")
-    output.append("")  # Для новой строки
 
     ZACHET_MARK = round(sum_3 - sum_b, 2)
-    output.append(f"YOU HAVE {round(sum_b/sum_v*100,2)}% ({sum_b}) OUT OF {round(ves,2)}")
     output.append("FOR ZACHET YOU NEED " + str(ZACHET_MARK) + " POINTS")
     output.append(f"YOU HAVE {blank} ZERO WORKS WITH {blank_v} SUMMARY POINTS THEIR NUMBERS")
 
