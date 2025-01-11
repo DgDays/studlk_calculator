@@ -29,6 +29,7 @@ def vesa(str):
         f_vesa.append(float(ves))
     #print(f_vesa)
     return f_vesa
+
 def bally(str):
     bally = str.split() #такое же количество элементов как в весах все остальное считается
     #print(bally)
@@ -39,7 +40,7 @@ def bally(str):
             #print(i,bally[i])
     #print(ball)
     return ball
-    pass
+
 def percent(vesa,bally):
     sum_v=0
     ves = 0
@@ -47,6 +48,7 @@ def percent(vesa,bally):
     blank = 0
     blank_v = 0
     vesa_blank = dict()
+    output = []
     for i in range(len(vesa)):
         ves += vesa[i]
         if bally[i] == 0:
@@ -68,35 +70,38 @@ def percent(vesa,bally):
     sum_3 = sum_v*0.6
     sum_4 = sum_v*0.75
     sum_5 = sum_v*0.85
-    print("VESA |",end=" ")
+    output.append("VESA |")
     for i in range(len(vesa)):
-        print(f"{vesa[i]:^6}|",end=" " )
-    print("")
-    print("BALLY|",end=" ")
+        output.append(f"{vesa[i]:^6}|")
+    output.append("")  # Для новой строки
+
+    output.append("BALLY|")
     for i in range(len(bally)):
-        print(f"{bally[i]:^6}|",end=" ")
-    print("")
+        output.append(f"{bally[i]:^6}|")
+    output.append("")  # Для новой строки
+
     ZACHET_MARK = round(sum_3 - sum_b, 2)
-    print(f"YOU HAVE {round(sum_b/sum_v*100,2)}% ({sum_b}) OUT OF {round(ves,2)}")
-    print("FOR ZACHET YOU NEED", ZACHET_MARK, "POINTS")
-    #("FOR 4 YOU NEED",round(sum_4-sum_b,2),"POINTS")
-    #print("FOR 5 YOU NEED",round(sum_5-sum_b,2),"POINTS")
-    print(F"YOU HAVE {blank} ZERO WORKS WITH {blank_v} SUMMARY POINTS THEIR NUMBERS")
+    output.append(f"YOU HAVE {round(sum_b/sum_v*100,2)}% ({sum_b}) OUT OF {round(ves,2)}")
+    output.append("FOR ZACHET YOU NEED " + str(ZACHET_MARK) + " POINTS")
+    output.append(f"YOU HAVE {blank} ZERO WORKS WITH {blank_v} SUMMARY POINTS THEIR NUMBERS")
+
     for i in range(len(vesa)):
         if bally[i] == 0:
-            print(f"{i+1:^6}|",end=" ")
-    print("")
+            output.append(f"{i+1:^6}|")
+    output.append("")  # Для новой строки
+
     for i in range(len(vesa)):
         if bally[i] == 0:
-            print(f"{vesa[i]:^6}|",end=" ")
-    print("")
-    print(f"YOUR MEAN MARK IS {points_b}% IF YOU STILL GET MEAN MARKS YOU NEED TO COMPLITE")
-    #print(vesa_blank)
+            output.append(f"{vesa[i]:^6}|")
+    output.append("")  # Для новой строки
+
+    output.append(f"YOUR MEAN MARK IS {points_b}% IF YOU STILL GET MEAN MARKS YOU NEED TO COMPLETE")
+
     for i in vesa_blank.keys():
         if ZACHET_MARK > 0:
-            print(f"{i+1:^4}{round(vesa_blank[i]*points_b/100,2):^6} || {ZACHET_MARK}")
+            output.append(f"{i+1:^4}{round(vesa_blank[i]*points_b/100,2):^6} || {ZACHET_MARK}")
             ZACHET_MARK -= round(vesa_blank[i]*points_b/100,2)
-    pass
+    return output
 
 @eel.expose
 def get_lessons(login, password):
@@ -215,6 +220,7 @@ def calculate(link, flag):
         table1 = table.find(id="MarkJournalPivotGrid_CVSCell_SCDTable").find_all("tr")
         points = table.find(id="MarkJournalPivotGrid_DCSCell_SCDTable").find_all("tr")
 
+        weights, points_a = [], []
         weight_str, points_str = ['']*2
         for raw in range(len(points)):
             for i in range(len(points[raw].find_all("td"))):
@@ -222,8 +228,18 @@ def calculate(link, flag):
                     if i % 2 and all(char in "1234567890," for char in points[raw].find_all("td")[i].decode_contents()):
                         points_str += f"{points[raw].find_all('td')[i].decode_contents()} "
                 else:
-                    if points[raw].find_all("td")[i].decode_contents() != '':
+                    if points[raw].find_all("td")[i].decode_contents() != '' and "/" in points[raw].find_all("td")[i].decode_contents():
                         weight_str += f"{points[raw].find_all('td')[i].decode_contents()} "
+
+        weights = weight_str.split(" ")
+        points_a = points_str.split(" ")
+        weight_str = " ".join(weights) 
+        points_str = " ".join(points_a[:len(weights)-1])
+
+        points_a = bally(points_str)
+        weights = vesa(weight_str)
+        print(points_a, weights)
+        output = percent(weights, points_a)
 
         print(weight_str, points_str)
 
@@ -296,9 +312,13 @@ def calculate(link, flag):
         back_button = table.new_tag('button', **{'class': 'back-button', "onclick": "backToMain()"})
         back_button.string = 'Возврат'
         div_block.insert(1, back_button)  # Добавляем кнопку в div
-    except:
-        eel.eel_alert_table()
-        return main_table
+
+        for line in output:
+            p = table.new_tag("p")
+            p.string = line
+            div_block.append(p)
+
+    
     finally:
         driver.quit()
     return table.prettify()
