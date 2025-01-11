@@ -70,7 +70,7 @@ def get_lessons(login, password):
             if "журнал" in i.text.lower():
                 p = new_body.new_tag('p', **{'class': 'link-like'})  # Создаем новый <p> с классом
                 p.string = i.string  # Копируем текст из <a>
-                p['onclick'] = f'calculate("{i['href']}",{1 if "да" in i.parent.parent.find_all("td")[12].text.lower() else 0})'
+                p['onclick'] = f'calculate("{i["href"]}",{1 if "да" in i.parent.parent.find_all("td")[12].text.lower() else 0})'
                 i.replace_with(p) 
 
         raws = new_table.find_all("tr")[1:]
@@ -124,6 +124,18 @@ def calculate(link, flag):
         table = BeautifulSoup(table, "html.parser")
         table1 = table.find(id="MarkJournalPivotGrid_CVSCell_SCDTable").find_all("tr")
         points = table.find(id="MarkJournalPivotGrid_DCSCell_SCDTable").find_all("tr")
+
+        weight_str, points_str = ['']*2
+        for raw in range(len(points)):
+            for i in range(len(points[raw].find_all("td"))):
+                if raw % 2:
+                    if i % 2 and all(char in "1234567890," for char in points[raw].find_all("td")[i].decode_contents()):
+                        points_str += f"{points[raw].find_all('td')[i].decode_contents()} "
+                else:
+                    if points[raw].find_all("td")[i].decode_contents() != '':
+                        weight_str += f"{points[raw].find_all('td')[i].decode_contents()} "
+
+        print(weight_str, points_str)
 
         table = BeautifulSoup('', "html.parser")
 
