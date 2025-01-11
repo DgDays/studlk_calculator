@@ -11,7 +11,7 @@ log, passw, main_table = ['']*3
 #𝕊𝕖𝕣.𝔻𝕖𝕤𝕙𝕖𝕣 itk,ns yf[eq
 
 def vesa(str):
-    vesa = str
+    vesa = str.replace(',','.')
     vesa = vesa.split()  #строка с весами нужны только значения со слешами
     f_vesa = []
     #print(vesa[0])
