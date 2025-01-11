@@ -72,24 +72,12 @@ def percent(vesa,bally):
     sum_5 = sum_v*0.85
 
     ZACHET_MARK = round(sum_3 - sum_b, 2)
-    output.append("FOR ZACHET YOU NEED " + str(ZACHET_MARK) + " POINTS")
-    output.append(f"YOU HAVE {blank} ZERO WORKS WITH {blank_v} SUMMARY POINTS THEIR NUMBERS")
-
-    for i in range(len(vesa)):
-        if bally[i] == 0:
-            output.append(f"{i+1:^6}|")
-    output.append("")  # Для новой строки
-
-    for i in range(len(vesa)):
-        if bally[i] == 0:
-            output.append(f"{vesa[i]:^6}|")
-    output.append("")  # Для новой строки
-
-    output.append(f"YOUR MEAN MARK IS {points_b}% IF YOU STILL GET MEAN MARKS YOU NEED TO COMPLETE")
+    output.append("Для зачета вам нужно " + str(ZACHET_MARK) + " баллов")
+    output.append(f"Ваша средняя оценка составляет {points_b}% Если вы все еще получаете средние оценки, вам нужно завершить:")
 
     for i in vesa_blank.keys():
         if ZACHET_MARK > 0:
-            output.append(f"{i+1:^4}{round(vesa_blank[i]*points_b/100,2):^6} || {ZACHET_MARK}")
+            output.append(f"Номер в таблице: {i+1:^4} Баллы: {round(vesa_blank[i]*points_b/100,2):^6}")
             ZACHET_MARK -= round(vesa_blank[i]*points_b/100,2)
     return output
 
@@ -228,10 +216,7 @@ def calculate(link, flag):
 
         points_a = bally(points_str)
         weights = vesa(weight_str)
-        print(points_a, weights)
         output = percent(weights, points_a)
-
-        print(weight_str, points_str)
 
         table = BeautifulSoup('', "html.parser")
 
@@ -304,7 +289,7 @@ def calculate(link, flag):
         div_block.insert(1, back_button)  # Добавляем кнопку в div
 
         for line in output:
-            p = table.new_tag("p")
+            p = table.new_tag("p", **{'class': 'p_out'})
             p.string = line
             div_block.append(p)
 
