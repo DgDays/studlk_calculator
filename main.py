@@ -8,6 +8,96 @@ from time import sleep
 
 log, passw, main_table = ['']*3
 
+#𝕊𝕖𝕣.𝔻𝕖𝕤𝕙𝕖𝕣 itk,ns yf[eq
+
+def vesa(str):
+    vesa = str
+    vesa = vesa.split()  #строка с весами нужны только значения со слешами
+    f_vesa = []
+    #print(vesa[0])
+    mark = 0
+    for i in vesa:
+        ves = ""
+        mark = 0
+        for j in i:
+            #print(i,j,mark)
+            if mark == 1:
+                ves += j
+            if j == '/':
+                mark = 1
+        #print(float(ves))
+        f_vesa.append(float(ves))
+    #print(f_vesa)
+    return f_vesa
+def bally(str):
+    bally = str.split() #такое же количество элементов как в весах все остальное считается
+    #print(bally)
+    ball = []
+    for i in range(len(bally)):
+        if i%2 == 1:
+            ball.append(float(bally[i]))
+            #print(i,bally[i])
+    #print(ball)
+    return ball
+    pass
+def percent(vesa,bally):
+    sum_v=0
+    ves = 0
+    sum_b=0
+    blank = 0
+    blank_v = 0
+    vesa_blank = dict()
+    for i in range(len(vesa)):
+        ves += vesa[i]
+        if bally[i] == 0:
+            blank += 1
+            blank_v += vesa[i]
+            vesa_blank[i] = vesa[i]
+        sum_v += vesa[i]
+        sum_b += vesa[i]*bally[i]/100
+    #print(vesa_blank)
+    vesa_blank = dict(sorted(vesa_blank.items(), reverse=1))
+    points = 0
+    points_b = 0
+    for i in range(len(vesa)):
+        if bally[i] != 0:
+            points += 1
+            points_b += bally[i]
+    points_b = round(points_b / points,2)
+    #print(sum_v,sum_b)
+    sum_3 = sum_v*0.6
+    sum_4 = sum_v*0.75
+    sum_5 = sum_v*0.85
+    print("VESA |",end=" ")
+    for i in range(len(vesa)):
+        print(f"{vesa[i]:^6}|",end=" " )
+    print("")
+    print("BALLY|",end=" ")
+    for i in range(len(bally)):
+        print(f"{bally[i]:^6}|",end=" ")
+    print("")
+    ZACHET_MARK = round(sum_3 - sum_b, 2)
+    print(f"YOU HAVE {round(sum_b/sum_v*100,2)}% ({sum_b}) OUT OF {round(ves,2)}")
+    print("FOR ZACHET YOU NEED", ZACHET_MARK, "POINTS")
+    #("FOR 4 YOU NEED",round(sum_4-sum_b,2),"POINTS")
+    #print("FOR 5 YOU NEED",round(sum_5-sum_b,2),"POINTS")
+    print(F"YOU HAVE {blank} ZERO WORKS WITH {blank_v} SUMMARY POINTS THEIR NUMBERS")
+    for i in range(len(vesa)):
+        if bally[i] == 0:
+            print(f"{i+1:^6}|",end=" ")
+    print("")
+    for i in range(len(vesa)):
+        if bally[i] == 0:
+            print(f"{vesa[i]:^6}|",end=" ")
+    print("")
+    print(f"YOUR MEAN MARK IS {points_b}% IF YOU STILL GET MEAN MARKS YOU NEED TO COMPLITE")
+    #print(vesa_blank)
+    for i in vesa_blank.keys():
+        if ZACHET_MARK > 0:
+            print(f"{i+1:^4}{round(vesa_blank[i]*points_b/100,2):^6} || {ZACHET_MARK}")
+            ZACHET_MARK -= round(vesa_blank[i]*points_b/100,2)
+    pass
+
 @eel.expose
 def get_lessons(login, password):
     global log, passw, main_table
@@ -219,4 +309,4 @@ def backToMain():
     return main_table
 
 eel.init("./other/gui")
-eel.start("login.html", mode="chrome", host="localhost", port=2700, block=True)
+eel.start("login.html", mode="edge", host="localhost", port=2700, block=True)
