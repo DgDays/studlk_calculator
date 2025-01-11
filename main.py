@@ -35,8 +35,7 @@ def bally(str):
     #print(bally)
     ball = []
     for i in range(len(bally)):
-        if i%2 == 1:
-            ball.append(float(bally[i]))
+        ball.append(float(bally[i]))
             #print(i,bally[i])
     #print(ball)
     return ball
