@@ -4,7 +4,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from bs4 import BeautifulSoup
-from time import sleep
+import traceback
 
 log, passw, main_table = ['']*3
 
@@ -292,7 +292,10 @@ def calculate(link, flag):
             p = table.new_tag("p", **{'class': 'p_out'})
             p.string = line
             div_block.append(p)
-    except:
+    except Exception as e:
+        print(e)
+        # Выводим трассировку стека
+        traceback.print_exc()
         eel.eel_alert_table()
         return main_table
     finally:
