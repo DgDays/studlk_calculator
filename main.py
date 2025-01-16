@@ -243,7 +243,7 @@ def calculate(link, flag):
                 width: 90vw; /* Ширина контейнера для таблицы */
                 margin-top: 10px; /* Отступ сверху для контейнера таблицы */
                 border: none;
-                border-radius: 10px;
+                border-radius: 30px;
             }
             table {
                 width: 100%; /* Таблица занимает всю ширину контейнера */
