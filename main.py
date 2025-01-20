@@ -5,6 +5,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from bs4 import BeautifulSoup
 import traceback
+import sys
 
 log, passw, main_table = ['']*3
 
@@ -308,4 +309,9 @@ def backToMain():
     return main_table
 
 eel.init("./other/gui")
-eel.start("login.html", mode="edge", host="localhost", port=2700, block=True)
+if sys.platform in ("win32", "win64"):
+    eel.start("login.html", mode="edge", host="localhost", port=2700, block=True)
+elif sys.platform == "linux":
+    eel.start("login.html", mode="chrome", host="localhost", port=2700, block=True)
+else:
+    eel.start("login.html", host="localhost", port=2700, block=True)
