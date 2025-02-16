@@ -66,7 +66,10 @@ def percent(vesa,bally):
         if bally[i] != 0:
             points += 1
             points_b += bally[i]
-    points_b = round(points_b / points,2)
+    if points == 0:
+        points_b = 0
+    else:
+        points_b = round(points_b / points,2)
     #print(sum_v,sum_b)
     sum_3 = sum_v*0.6
     sum_4 = sum_v*0.75
